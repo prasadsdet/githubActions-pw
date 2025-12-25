@@ -1,7 +1,10 @@
 import { chromium, firefox, webkit, LaunchOptions } from "@playwright/test";
+const headlessEnv = (process.env.PLAYWRIGHT_HEADLESS ?? process.env.HEADLESS ?? "").toLowerCase();
+const headless = headlessEnv ? headlessEnv === "true" : true; // default to headless=true
+
 
 const options:LaunchOptions={
-    headless:false
+    headless,
 }
 
 export const invokeBrowser = ()=>{
