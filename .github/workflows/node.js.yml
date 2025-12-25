@@ -1,0 +1,49 @@
+name: NUNNA-PlayWright-Cucumber-Typescript
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [24.x]
+        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+    - name: Install npm
+      run: npm install
+    - name: Install Playwright
+      run: npm init playwright@latest
+    - name: Install Playwright Browsers
+      run: npx playwright install
+    - name: Install Cucumber
+      run: npm i @cucumber/cucumber -D
+    - name: Install ts-node
+      run: npm i ts-node -D
+    - name: Install Dotenv
+      run: npm install dotenv
+    - name: Install Cucumber Report
+      run: npm i multiple-cucumber-html-reporter -D
+    - name: Insta;; winston
+      run: npm i winston
+    - name: run cucumber
+      run: npm test
+    - uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: Report
+        path: test-result
+        retention-days: 2
